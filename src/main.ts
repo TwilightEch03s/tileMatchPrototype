@@ -120,6 +120,7 @@ processBtn.onclick = async () => {
 
       updateTileNeighbors(tiles, cols, rows);
 
+      // If tile found
       const foundTile = bfsFindNearestMatchingTile(
         tiles[0],
         tile => tile.description?.includes('target') ?? false
