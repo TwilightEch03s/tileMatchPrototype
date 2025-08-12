@@ -19,8 +19,8 @@ export interface Tile {
 
 // Function to assign each tile's direct neighbors (up, down, left, right) based on its position in the grid
 export function updateTileNeighbors(tiles: Tile[], cols: number, rows: number): void {
-  for (let y = 0; y < rows; y++) {          //Loop through each row
-    for (let x = 0; x < cols; x++) {        //Loop thorugh each col
+  for (let y = 0; y < rows; y++) {          // Loop through each row
+    for (let x = 0; x < cols; x++) {        // Loop thorugh each col
       const index = y * cols + x;           // Convert 2D pos into an array index
       const tile = tiles[index];            // Get the tile at the index
       
@@ -70,7 +70,12 @@ export function bfsFindNearestMatchingTile(
         ...(tile.down || []),
         ...(tile.left || []),
         ...(tile.right || []),
+        ...(tile.upLeft || []),
+        ...(tile.upRight || []),
+        ...(tile.downLeft || []),
+        ...(tile.downRight || []),
       ];
+
 
       // Add neighbors to the queue if they haven't been visited yet
       for (const n of neighbors) {
@@ -132,17 +137,14 @@ processBtn.onclick = async () => {
       updateTileNeighbors(tiles, cols, rows);
 
       // If tile found
-      const foundTile = bfsFindNearestMatchingTile(
-        tiles[0],
-        tile => tile.description?.includes('target') ?? false
-      );
-
-      if (foundTile) {
-        alert(`Found tile with id: ${foundTile.id}`);
-      } else {
-        alert('No matching tile found.');
+      for (const tile of tiles) {
+        const foundTile = bfsFindNearestMatchingTile(tile, t => t.description?.includes('target') ?? false);
+        if (foundTile) {
+          console.log(`From tile ${tile.id}, nearest matching tile found: ${foundTile.id}`);
+        } else {
+          console.log(`From tile ${tile.id}, no matching tile found.`);
+        }
       }
-
 
       // Display all tile images on screen
       const tileGallery = document.getElementById('tileGallery') || document.createElement('div');
