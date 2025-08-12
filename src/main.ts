@@ -10,6 +10,11 @@ export interface Tile {
   down?: Tile[];
   left?: Tile[];
   right?: Tile[];
+
+  upLeft?: Tile[];
+  upRight?: Tile[];
+  downLeft?: Tile[];
+  downRight?: Tile[];
 }
 
 // Function to assign each tile's direct neighbors (up, down, left, right) based on its position in the grid
@@ -30,6 +35,12 @@ export function updateTileNeighbors(tiles: Tile[], cols: number, rows: number): 
 
       // Set "right" neighbor if not in the last column
       tile.right = x < cols - 1 ? [tiles[y * cols + (x + 1)]] : [];
+
+      // Diagonal neighbors
+      tile.upLeft = (y > 0 && x > 0) ? [tiles[(y - 1) * cols + (x - 1)]] : [];
+      tile.upRight = (y > 0 && x < cols - 1) ? [tiles[(y - 1) * cols + (x + 1)]] : [];
+      tile.downLeft = (y < rows - 1 && x > 0) ? [tiles[(y + 1) * cols + (x - 1)]] : [];
+      tile.downRight = (y < rows - 1 && x < cols - 1) ? [tiles[(y + 1) * cols + (x + 1)]] : [];
     }
   }
 }
@@ -221,7 +232,11 @@ processBtn.onclick = async () => {
           addNeighbor('Up', tile.up);
           addNeighbor('Down', tile.down);
           addNeighbor('Left', tile.left);
-          addNeighbor('Right', tile.right);
+          addNeighbor('Right', tile.right); 
+          addNeighbor('Up-Left', tile.upLeft);
+          addNeighbor('Up-Right', tile.upRight);
+          addNeighbor('Down-Left', tile.downLeft);
+          addNeighbor('Down-Right', tile.downRight);
 
           modal.style.display = 'flex';
         };
